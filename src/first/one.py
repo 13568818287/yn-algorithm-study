@@ -68,7 +68,7 @@ def one_chapter_14():
          
 def one_chapter_18(): 
     '''列表解析语法来产生列表[0,2,6, 12,20,30,42,56,72,90]'''
-    result = [ x*(2+2*x)//2 for x in range(0,10)]
+    result = [ n*(n+1) for n in range(0,10)]
     return result
 
 def one_chapter_22(a, b):  
