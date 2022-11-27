@@ -90,6 +90,7 @@ class PredatoryCreditCardV2(CreditCard):
         self._apr=apr
         self.__monthcalls = [self.__get_month(), 0]
         self._lowst_money= 0
+        self._pre_pay=0
     @property
     def lowst_pay_money(self):
         '''最低付款额'''
@@ -101,10 +102,18 @@ class PredatoryCreditCardV2(CreditCard):
     def __get_month(self):
         return datetime().month
 
+    
     def charge(self, price):
-        '''收费'''
-        if price < self.lowst_pay_money:
-            pass
+        '''收费'''       
+        has_delay=False
+        if self._pre_pay <= self.lowst_pay_money:
+            # 什么是连续？第二次仍是最低付款额度
+            has_delay=True                  
+
+        self._pre_pay=price
+        if has_delay:
+            # 有延迟，需要增加延迟费用
+            price += 1
         success = super().charge(price)
         # 收费由于超过信用卡额度被拒绝时，会收取5元的费用
         if not success:
@@ -119,8 +128,8 @@ class PredatoryCreditCardV2(CreditCard):
         return self.__monthcalls[1]
 
     def process_month(self):
-        
-        if self.check_month_call(self.__get_month()) > 10:
+        m=self.__get_month()
+        if self.check_month_call(m) > 10:
             # 
             self.set_blance(self.get_blance() + 1)
         # 对未清余额按月收取利息的机制
