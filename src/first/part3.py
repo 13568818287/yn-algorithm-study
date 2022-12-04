@@ -64,7 +64,7 @@ def longgetSubstring(str_value):
             t = stmp[n+1:] + x
             stmp = t            
        
-        if str_value[-1] == x and len(stmp) > 1:
+    if len(stmp) > 1:
             lst_result.append(stmp)
 
     lst_result.sort(key=lambda x:len(x), reverse=True)
